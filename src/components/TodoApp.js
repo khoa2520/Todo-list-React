@@ -1,6 +1,8 @@
 import React from "react";
 import Header from "./layout/Header";
+import AddTodo from "./AddTodo";
 import Todos from "./Todos";
+import uuid from "uuid";
 
 class TodoApp extends React.Component {
   state = {
@@ -32,14 +34,32 @@ class TodoApp extends React.Component {
       }),
     });
   };
+
+  deleteTodo = (id) => {
+    this.setState({
+      todos: [
+        ...this.state.todos.filter((todo) => {
+          //... toán tử Spread operator, lấy todos hiện tại
+          return todo.id !== id;
+        }),
+      ],
+    });
+  };
+
+  addTodo = (title) => {
+    const newTodo = { id: 4, title: title, completed: false };
+    this.setState({ todos: [...this.state.todos, newTodo] });
+  };
+
   render() {
     return (
       <div className="container">
         <Header />
-
+        <AddTodo addTodo={this.addTodo} />
         <Todos
           todos={this.state.todos}
           handleChange={this.handleCheckboxChange}
+          deleteTodo={this.deleteTodo}
         />
 
         {/* <ul>
@@ -51,14 +71,5 @@ class TodoApp extends React.Component {
     );
   }
 }
-
-// render() {
-//     return (
-//         <div>
-//             <Header />
-//             <Todos todos = {this.state.todos}/>
-//         </div>
-//     )
-// }
 
 export default TodoApp;
